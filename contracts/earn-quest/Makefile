@@ -1,4 +1,4 @@
-.PHONY: help test build snapshots snapshots-clean snapshots-verify snapshots-restore snapshots-backup
+.PHONY: help test test-verbose build license-check deny-check snapshots snapshots-clean snapshots-verify snapshots-restore snapshots-backup
 
 # Default target
 help:
@@ -9,6 +9,8 @@ help:
 	@echo "  make build              - Build the contract"
 	@echo "  make test               - Run all tests"
 	@echo "  make test-verbose       - Run tests with verbose output"
+	@echo "  make license-check      - Run cargo-deny license checks"
+	@echo "  make deny-check         - Run cargo-deny advisory and license checks"
 	@echo ""
 	@echo "Snapshot Management:"
 	@echo "  make snapshots          - Update all snapshots (with backup)"
@@ -42,6 +44,16 @@ test:
 test-verbose:
 	@echo "Running tests (verbose)..."
 	cargo test -- --nocapture
+
+# Run cargo-deny license policy checks
+license-check:
+	@echo "Running cargo-deny license checks..."
+	cargo deny check licenses
+
+# Run cargo-deny policy checks used by CI
+deny-check:
+	@echo "Running cargo-deny advisory and license checks..."
+	cargo deny check advisories licenses
 
 # Update all snapshots with backup
 snapshots:
